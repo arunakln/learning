@@ -1,0 +1,13 @@
+4. Solve the below java program    
+(Note: Rectangle object is defined as drawRectangle(x-axis, y-axis, width, height))
+
+    class MyCanvas extends JComponent {
+        public void paint(Graphics g) {
+
+            g.drawRect (2, 2, 10, 10);
+            g.drawRect(5, 5, 10, 10);
+
+        }
+    }
+
+Will two rectangles overlap?

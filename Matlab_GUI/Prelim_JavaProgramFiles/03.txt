@@ -1,0 +1,14 @@
+3. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+            int x =2;
+            int y =3;
+
+            String result = (x < y) ^ (x == y-- )? "Cat" : "Horse";
+
+            System.out.println(result); 
+        }
+    }
+
+What is the output of the program?

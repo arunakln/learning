@@ -1,0 +1,23 @@
+11. Solve the below java program
+(Note: Rectangle object is defined as drawRectangle(x-axis, y-axis, width, height))
+
+    class MyCanvas extends JComponent {
+        public void paint(Graphics g) {
+
+            int x1 = 10;
+            int y1 = 10;
+            int w1 = 130;
+            int h1 = 90;
+
+            int x2 = 130;
+            int y2 = 50;
+            int w2 = 100;
+            int h2 = 100;
+
+            g.drawRect (x1, y1, w1, h1);
+            g.drawRect(x2, y2, w2, h2);
+
+        }
+    }
+
+Will the two rectangles overlap ?

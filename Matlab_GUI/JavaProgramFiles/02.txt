@@ -1,0 +1,21 @@
+2. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+
+            int [] vars = {4, 8, 10, 12, 16, 10, 18, 2, 3, 5};
+            int value = 0;
+            int count = 0;
+
+            for(int i = 0; i< vars.length; i++){
+                value += vars[i];
+                count++;
+            }
+
+            int temp = value/count;
+            System.out.println(temp);
+        }
+    }
+
+
+What is the output of the program ?

@@ -1,0 +1,19 @@
+7. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+
+            int x = 3;
+            int y = 5;
+            int z = 8;
+
+            x++;
+            y++;
+            z++;
+
+            String result = (x > 4 && y < 6) | (x > 6 && z > 8)? "Cat" : "Horse";
+            System.out.println(result);
+        }
+    }
+
+What is the output of the program?

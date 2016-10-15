@@ -1,0 +1,24 @@
+3. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+
+            double [] array = {10, 15, 5, 7, 9, 4};
+            double service_tax_percent = 5;
+            double tip_percent = 10;
+            double total_amount = 0;
+            double service_tax_amount = 0;
+            double tip_amount = 0;
+
+            for(int i=0; i< array.length; i++){
+                total_amount = total_amount + array[i];
+            }
+
+            service_tax_amount = (total_amount * service_tax_percent)/100.00 ;
+            total_amount = total_amount + service_tax_amount;
+            tip_amount = (total_amount * tip_percent) / 100.00;
+            System.out.println("Tip amount is : £"+ tip_amount);
+        }
+    }
+
+What is the output of the program?

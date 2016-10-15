@@ -1,0 +1,28 @@
+4. Solve the below java program
+
+    public class Main {
+
+        public static void main(String[] args) {
+
+            ArrayList<Object> array = new ArrayList<Object> ();
+
+            String a = "Circle";
+            String b = "Triangle";
+            String c = "Square";
+            String d = "Triangle";
+            String e= "Circle";
+            String f = "Triangle";
+
+            array.add(b);
+            array.add(a);
+            array.add(d);
+            array.add(e);
+
+            for (int i = 1; i < 4; i++) {
+                System.out.print(array.get(i) + " ");
+            }
+
+        }
+    }
+
+Last three shape objects are?

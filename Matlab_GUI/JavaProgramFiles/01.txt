@@ -1,0 +1,16 @@
+1. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+
+            String var = "Helloworld" ;
+
+            for ( int j = var.length() -1; j >=0; j--)
+            {
+                System.out.print(var.charAt(j));
+            }
+        }
+    }
+
+
+What is the output of the program ?

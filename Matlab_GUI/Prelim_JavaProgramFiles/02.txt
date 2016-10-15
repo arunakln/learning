@@ -1,0 +1,28 @@
+2. Solve the below java program
+
+    public class Main {
+        public static void main(String[] args) {
+
+               ArrayList<Object> array = new ArrayList<Object>();
+
+               int temp1 = 21;
+
+
+               array.add("Tringle");
+               array.add("Square");
+               array.add("Triangle");
+
+               Object o = (17 >= temp1)? "Triangle" : "Square";
+
+               array.add(o);      
+
+               System.out.println("Last Three Shape Object are:");
+
+               for(int i=1; i< 4; i++){
+                   System.out.print(array.get(i) + " ");
+               }
+        }
+    }
+
+
+What is the output of the program ?

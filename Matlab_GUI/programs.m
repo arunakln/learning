@@ -1,0 +1,318 @@
+function varargout = programs(varargin)
+% PROGRAMS MATLAB code for programs.fig
+%      PROGRAMS, by itself, creates a new PROGRAMS or raises the existing
+%      singleton*.
+%
+%      H = PROGRAMS returns the handle to a new PROGRAMS or the handle to
+%      the existing singleton*.
+%
+%      PROGRAMS('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in PROGRAMS.M with the given input arguments.
+%
+%      PROGRAMS('Property','Value',...) creates a new PROGRAMS or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before programs_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are pass ed to programs_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help programs
+
+% Last Modified by GUIDE v2.5 13-Jul-2016 03:53:14
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @programs_OpeningFcn, ...
+                   'gui_OutputFcn',  @programs_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before programs is made visible.
+function programs_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to programs (see VARARGIN)
+
+% Choose default command line output for programs
+handles.output = hObject;
+
+% get the rendered subject name which is obtained from the instructions
+% page from the user.
+handles.subjName = '';
+% handles.sPort = '';
+handles.fileIndex = 1;
+
+if (length(varargin) >0 && isfield(varargin{1}, 'subjName'))
+    handles.subjName = varargin{1}.subjName;
+end
+
+if (length(varargin) >0 && isfield(varargin{1}, 'fileIndex'))
+    handles.fileIndex = varargin{1}.fileIndex;
+end
+
+ if (isfield(handles, 'sPort') == 0)
+    handles.sPort = serial('COM10');
+    set(handles.sPort,'BaudRate',9600);
+    fopen(handles.sPort);
+ end
+
+
+hObject.UserData = handles;
+
+% Update handles structure
+
+
+if(isfield(handles,'filelist') == 1 && handles.fileIndex <= length(handles.filelist))
+    obj = findobj(hObject, 'Tag', 'program');
+    displayProgramContent(obj, handles);
+end
+
+guidata(hObject, handles);
+
+serialConnection(handles,3);
+
+% UIWAIT makes programs wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = programs_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+%set(gcf, 'units','normalized','outerposition',[0 0 1 1]);
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton1.
+function pushbutton1_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+hObj = findobj('Tag', 'program');
+obj = findobj('Tag', 'edit1');
+
+
+handles.data{handles.fileIndex+1, 1} = num2str(handles.fileIndex);
+handles.data{handles.fileIndex+1, 2} = obj.String;
+
+obj.String = '';
+handles.keypressStatus = 0;
+
+handles.fileIndex = handles.fileIndex+1;
+
+% Update handles structure
+guidata(hObject, handles);
+
+displayProgramContent(hObj, handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function program_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to program (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Add the jar files related to XLWrite to java path.
+javaaddpath('jxl.jar');
+javaaddpath('MXL.jar');
+
+import mymxl.*;
+import jxl.*;  
+
+% get all the java program files form the folder and disaply one by one to
+% the user
+filelist=dir(fullfile('JavaProgramFiles/*.txt'));
+
+
+
+handles.filelist = filelist;
+handles.fileIndex = 1;
+handles.folderLocation = 'Prelim_JavaProgramFiles/';
+handles.keypressStatus = 0;
+
+handles.data = cell(length(handles.filelist)+1, 2);
+
+handles.data{handles.fileIndex, 1} = char('Question No');
+handles.data{handles.fileIndex, 2} = char('Answer');
+
+% Update handles structure
+guidata(hObject, handles);
+
+% --- Executes on key press with focus on edit1 and none of its controls.
+function edit1_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  structure with the following fields (see MATLAB.UI.CONTROL.UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)
+
+if(handles.keypressStatus == 0)
+
+    %serial_connect: sent marker as '2 'so emotive know as it is keyboard
+    %input.  
+    
+    serialConnection(handles, 2);    
+    handles.keypressStatus = 1;
+    
+    % Update handles structure
+    guidata(hObject, handles);
+end
+
+% Display the java program one by one to the user to solve.
+function displayProgramContent(hObject, handles)
+
+%clc
+%serial_connect: sent marker as '1' so emotive know as it is start of a
+
+filelist_len = length(handles.filelist);
+if(filelist_len > 0 && handles.fileIndex <= filelist_len)
+    
+    % dispaly Relax screen inbetween each task.
+%     if(handles.fileIndex >1)
+        WinOnTop(relax(handles));
+%     end
+    
+    currfile = strcat(handles.folderLocation,handles.filelist(handles.fileIndex).name);
+
+    if exist(currfile, 'file')
+        data1 = importdata(currfile,''); %// Import all text as a cell array with each cell for each line
+        set(hObject, 'Max', 2); %// Enable multi-line string input to the editbox
+        set(hObject,'String',data1) %//  Put the text from text file into the editbox using `String` property
+        set(hObject,'HorizontalAlignment','left') %// Align the text left
+        set(hObject,'FontSize', 12.0);
+%         set(hObject,'FontUnits', 'normalized');
+    end
+    
+else
+    % once all the tasks are solved save the question no and answer to an
+    % Excel file.
+    t = datetime('now');
+    dtstr = datestr(t,'dd_mm_yyyy_HH_MM');
+    name = strrep(strtrim(handles.subjName), ' ', '_');
+    filetosave = strcat('UserData/', name ,'_', dtstr, '.xls');
+    xlwrite(filetosave,handles.data);
+    
+    close(programs); % Close the Programs page
+    WinOnTop(thankyou);% Open Thank you page    
+end
+
+
+% --- Executes when user attempts to close figure1.
+function figure1_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+if (isfield(handles, 'sPort'))
+    fclose('all');
+    delete(handles.sPort);
+    clear handles.sPort; 
+end
+
+% Hint: delete(hObject) closes the figure
+delete(hObject);
+
+function edit2_Callback(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit2 as text
+%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit3_Callback(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit3 as text
+%        str2double(get(hObject,'String')) returns contents of edit3 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit3_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function figure1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes during object deletion, before destroying properties.
+function figure1_DeleteFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
