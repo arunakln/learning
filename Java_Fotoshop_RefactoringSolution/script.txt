@@ -1,0 +1,5 @@
+open Tulips.jpg
+look
+rot90
+save output.jpg
+quit
