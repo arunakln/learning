@@ -41,16 +41,16 @@ function testval = networkFunction(XTRAIN, YTRAIN, XTEST, YTEST)
 
 
     % convert  into a format that can be compared with maxindex
-    [ rIndex ,cIndex] = find(YTEST);
+    [ testout ,testIndex] = find(YTEST);
 
     % Correctly classified samples divided by the classified samples. 
     % Inconclusive results are not counted
-   
-    cp = classperf(cIndex, maxIndex);
+    % Check the success of the classifier
+    cp = classperf(testIndex, maxIndex);
     
    
-%     figure, plotperform(tr)
-%     figure, plottrainstate(tr)
+    figure, plotperform(tr)
+    figure, plottrainstate(tr)
 
     
     % get the correctrate
