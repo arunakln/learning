@@ -1,0 +1,65 @@
+﻿@model Aruna_technicalTest.Models.InvoiceModel
+
+@{
+    ViewBag.Title = "Invoice Details";
+}
+
+<div class="container">
+
+    <!-- Portfolio Item Heading -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Invoice Details
+            </h1>
+        </div>
+    </div>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.TaxPointDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TaxPointDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Reference)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Reference)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TotalGross)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TotalGross)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+
+        </dl>
+    </div>
+    <p>
+     @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>
+
